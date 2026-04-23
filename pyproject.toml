@@ -20,3 +20,6 @@ point-trace = "point_trace.main:main"
 packages = ["src/point_trace"]
 
 [tool.uv]
+
+[dependency-groups]
+dev = ["pyinstaller>=6.0"]

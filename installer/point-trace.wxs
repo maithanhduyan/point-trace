@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  WiX Toolset v4 — Point Trace installer
+  Build: wix build installer/point-trace.wxs -d Version=X.Y.Z -o dist/point-trace-X.Y.Z-setup.msi
+-->
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+
+  <Package Name="Point Trace"
+           Version="$(var.Version)"
+           Manufacturer="Point Trace"
+           UpgradeCode="2F4A8B16-3C7D-4E9F-A012-345678901234"
+           Scope="perMachine"
+           Compressed="yes">
+
+    <!-- Tự động gỡ version cũ khi cài version mới -->
+    <MajorUpgrade DowngradeErrorMessage="A newer version of Point Trace is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <Feature Id="ProductFeature" Title="Point Trace" Level="1">
+      <ComponentGroupRef Id="AppFiles" />
+      <ComponentRef Id="StartMenuShortcut" />
+      <ComponentRef Id="DesktopShortcut" />
+    </Feature>
+
+  </Package>
+
+  <!-- ── Cây thư mục cài đặt ──────────────────────────────────────── -->
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFiles64Folder">
+        <Directory Id="INSTALLFOLDER" Name="Point Trace" />
+      </Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="AppStartMenuFolder" Name="Point Trace" />
+      </Directory>
+      <Directory Id="DesktopFolder" />
+    </Directory>
+  </Fragment>
+
+  <!-- ── Files (thu hoạch toàn bộ output PyInstaller) ────────────── -->
+  <Fragment>
+    <ComponentGroup Id="AppFiles" Directory="INSTALLFOLDER">
+      <!-- WiX v4 glob: đệ quy toàn bộ dist/point-trace/ -->
+      <Files Include="..\dist\point-trace\**\*" />
+    </ComponentGroup>
+
+    <!-- Shortcut trong Start Menu -->
+    <Component Id="StartMenuShortcut" Directory="AppStartMenuFolder">
+      <Shortcut Id="StartMenuShortcut"
+                Name="Point Trace"
+                Description="Transparent overlay for tracing points across any Windows app"
+                Target="[INSTALLFOLDER]point-trace.exe"
+                WorkingDirectory="INSTALLFOLDER" />
+      <RemoveFolder Id="RemoveAppStartMenu" Directory="AppStartMenuFolder" On="uninstall" />
+      <RegistryValue Root="HKCU"
+                     Key="Software\PointTrace"
+                     Name="StartMenu"
+                     Type="integer" Value="1"
+                     KeyPath="yes" />
+    </Component>
+
+    <!-- Shortcut trên Desktop -->
+    <Component Id="DesktopShortcut" Directory="DesktopFolder">
+      <Shortcut Id="DesktopShortcut"
+                Name="Point Trace"
+                Description="Transparent overlay for tracing points across any Windows app"
+                Target="[INSTALLFOLDER]point-trace.exe"
+                WorkingDirectory="INSTALLFOLDER" />
+      <RegistryValue Root="HKCU"
+                     Key="Software\PointTrace"
+                     Name="Desktop"
+                     Type="integer" Value="1"
+                     KeyPath="yes" />
+    </Component>
+
+  </Fragment>
+
+</Wix>

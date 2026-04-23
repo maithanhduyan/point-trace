@@ -22,8 +22,13 @@ else:
     except ImportError:
         import tomli as tomllib  # type: ignore[no-redef]
 
-# Vị trí mặc định của config file (bên cạnh pyproject.toml)
-_DEFAULT_CONFIG = Path(__file__).parent.parent.parent / "config.toml"
+# Vị trí mặc định của config file
+# - PyInstaller bundle : next to .exe  (sys.executable.parent)
+# - Chạy từ source     : project root  (__file__/../../../)
+if getattr(sys, "frozen", False):
+    _DEFAULT_CONFIG = Path(sys.executable).parent / "config.toml"
+else:
+    _DEFAULT_CONFIG = Path(__file__).parent.parent.parent / "config.toml"
 
 # ── Ánh xạ tên chuỗi → pynput Key ────────────────────────────────────
 _MODIFIER_MAP: dict[str, keyboard.Key] = {
