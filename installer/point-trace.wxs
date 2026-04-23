@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   WiX Toolset v4 — Point Trace installer
+  PyInstaller --onefile: output là dist/point-trace.exe (single EXE)
   Build: wix build installer/point-trace.wxs -d Version=X.Y.Z -o dist/point-trace-X.Y.Z-setup.msi
 -->
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
 
   <Package Name="Point Trace"
            Version="$(var.Version)"
-           Manufacturer="Point Trace"
+           Manufacturer="Point Trace Contributors"
            UpgradeCode="2F4A8B16-3C7D-4E9F-A012-345678901234"
            Scope="perMachine"
            Compressed="yes">
@@ -26,32 +27,44 @@
 
   <!-- ── Cây thư mục cài đặt ──────────────────────────────────────── -->
   <Fragment>
-    <Directory Id="TARGETDIR" Name="SourceDir">
-      <Directory Id="ProgramFiles64Folder">
-        <Directory Id="INSTALLFOLDER" Name="Point Trace" />
-      </Directory>
-      <Directory Id="ProgramMenuFolder">
-        <Directory Id="AppStartMenuFolder" Name="Point Trace" />
-      </Directory>
-      <Directory Id="DesktopFolder" />
-    </Directory>
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="Point Trace" />
+    </StandardDirectory>
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="AppStartMenuFolder" Name="Point Trace" />
+    </StandardDirectory>
+    <StandardDirectory Id="DesktopFolder" />
   </Fragment>
 
-  <!-- ── Files (thu hoạch toàn bộ output PyInstaller) ────────────── -->
+  <!-- ── Application files ─────────────────────────────────────────── -->
   <Fragment>
     <ComponentGroup Id="AppFiles" Directory="INSTALLFOLDER">
-      <!-- WiX v4 glob: đệ quy toàn bộ dist/point-trace/ -->
-      <Files Include="..\dist\point-trace\**\*" />
+
+      <!-- EXE bundle duy nhất (PyInstaller --onefile) -->
+      <Component Id="MainExe" Guid="*">
+        <File Id="PointTraceExe"
+              Source="..\dist\point-trace.exe"
+              KeyPath="yes" />
+      </Component>
+
+      <!-- Config file: user có thể chỉnh hotkeys sau khi cài -->
+      <Component Id="ConfigFile" Guid="*">
+        <File Id="ConfigToml"
+              Source="..\config.toml" />
+      </Component>
+
     </ComponentGroup>
 
     <!-- Shortcut trong Start Menu -->
-    <Component Id="StartMenuShortcut" Directory="AppStartMenuFolder">
-      <Shortcut Id="StartMenuShortcut"
+    <Component Id="StartMenuShortcut" Directory="AppStartMenuFolder" Guid="*">
+      <Shortcut Id="AppStartMenuShortcut"
                 Name="Point Trace"
                 Description="Transparent overlay for tracing points across any Windows app"
                 Target="[INSTALLFOLDER]point-trace.exe"
                 WorkingDirectory="INSTALLFOLDER" />
-      <RemoveFolder Id="RemoveAppStartMenu" Directory="AppStartMenuFolder" On="uninstall" />
+      <RemoveFolder Id="RemoveAppStartMenuFolder"
+                    Directory="AppStartMenuFolder"
+                    On="uninstall" />
       <RegistryValue Root="HKCU"
                      Key="Software\PointTrace"
                      Name="StartMenu"
@@ -60,8 +73,8 @@
     </Component>
 
     <!-- Shortcut trên Desktop -->
-    <Component Id="DesktopShortcut" Directory="DesktopFolder">
-      <Shortcut Id="DesktopShortcut"
+    <Component Id="DesktopShortcut" Directory="DesktopFolder" Guid="*">
+      <Shortcut Id="AppDesktopShortcut"
                 Name="Point Trace"
                 Description="Transparent overlay for tracing points across any Windows app"
                 Target="[INSTALLFOLDER]point-trace.exe"

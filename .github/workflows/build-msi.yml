@@ -42,13 +42,13 @@ jobs:
           uv run pyinstaller `
             --name "point-trace" `
             --windowed `
-            --onedir `
-            --add-data "config.toml;." `
+            --onefile `
             src/point_trace/main.py
+          # Output: dist/point-trace.exe (single bundled EXE)
 
-      # ── 6. Cài WiX Toolset v4 ────────────────────────────────────────
+      # ── 6. Cài WiX Toolset v4 (latest) ──────────────────────────────────
       - name: Install WiX Toolset v4
-        run: dotnet tool install --global wix --version "4.*"
+        run: dotnet tool install --global wix
 
       # ── 7. Build MSI ─────────────────────────────────────────────────
       - name: Build MSI
