@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  WiX Toolset v4 — Point Trace installer
-  PyInstaller --onefile: output là dist/point-trace.exe (single EXE)
+  WiX Toolset v4 - Point Trace installer
+  PyInstaller onefile mode: output is dist/point-trace.exe (single EXE)
   Build: wix build installer/point-trace.wxs -d Version=X.Y.Z -o dist/point-trace-X.Y.Z-setup.msi
 -->
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
@@ -40,7 +40,7 @@
   <Fragment>
     <ComponentGroup Id="AppFiles" Directory="INSTALLFOLDER">
 
-      <!-- EXE bundle duy nhất (PyInstaller --onefile) -->
+      <!-- EXE bundle duy nhat (PyInstaller onefile mode) -->
       <Component Id="MainExe" Guid="*">
         <File Id="PointTraceExe"
               Source="..\dist\point-trace.exe"
