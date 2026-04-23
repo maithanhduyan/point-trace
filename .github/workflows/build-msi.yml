@@ -48,7 +48,7 @@ jobs:
 
       # ── 6. Cài WiX Toolset v4 (latest) ──────────────────────────────────
       - name: Install WiX Toolset v4
-        run: dotnet tool install --global wix
+        run: dotnet tool install --global wix --version "4.*"
 
       # ── 7. Build MSI ─────────────────────────────────────────────────
       - name: Build MSI
