@@ -55,6 +55,8 @@ def main() -> None:
 
     # ── Kết nối signals → slots ───────────────────────────────────────
     listener.point_added.connect(overlay.add_point)
+    listener.isolated_point_added.connect(overlay.add_isolated_point)
+    listener.break_chain_requested.connect(overlay.break_chain)
     listener.undo_requested.connect(overlay.undo_point)
     listener.clear_requested.connect(overlay.clear_points)
     listener.save_requested.connect(lambda: store.save())
@@ -77,9 +79,9 @@ def main() -> None:
     tray = QtWidgets.QSystemTrayIcon(_make_tray_icon(), parent=app)
     tray.setToolTip(
         "Point Trace đang chạy\n"
-        "Ctrl+D: Thêm điểm  |  Ctrl+Shift+Space: Bật/tắt overlay\n"
-        "Ctrl+Shift+O: Đường nối  |  Ctrl+Z: Undo\n"
-        "Ctrl+Shift+C: Xóa hết  |  Ctrl+Shift+S: Lưu  |  Esc: Thoát"
+        "Ctrl+D: Thêm điểm nối  |  Ctrl+Shift+D: Điểm đơn lẻ\n"
+        "Ctrl+B: Ngắt chuỗi  |  Ctrl+Shift+Space: Bật/tắt overlay\n"
+        "Ctrl+Z: Undo  |  Ctrl+Shift+C: Xóa hết  |  Esc: Thoát"
     )
 
     menu = QtWidgets.QMenu()

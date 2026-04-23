@@ -5,8 +5,14 @@
 # Tham khảo tên đầy đủ: https://pynput.readthedocs.io/en/latest/keyboard.html
 
 [hotkeys]
-# Thêm điểm tại vị trí con trỏ chuột
+# Thêm điểm kết nối vào chuỗi hiện tại
 add_point       = ["ctrl", "d"]
+
+# Thêm điểm đơn lẻ (không nối với điểm nào)
+add_isolated    = ["ctrl", "shift", "d"]
+
+# Ngắt chuỗi hiện tại, Ctrl+D tiếp theo bắt đầu chuỗi mới
+break_chain     = ["ctrl", "b"]
 
 # Bật / tắt overlay (ẩn / hiện lớp phủ)
 toggle_overlay  = ["ctrl", "shift", "space"]

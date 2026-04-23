@@ -15,7 +15,9 @@ class GlobalListener(QObject):
     Theo dõi tập phím đang giữ và phát signal khi khớp hotkey.
 
     Tất cả hotkeys cấu hình trong config.toml, mặc định:
-        Ctrl + D              → thêm điểm tại vị trí con trỏ chuột
+        Ctrl + D              → thêm điểm kết nối vào chuỗi hiện tại
+        Ctrl + Shift + D      → thêm điểm đơn lẻ (không nối với điểm nào)
+        Ctrl + B              → ngắt chuỗi hiện tại, Ctrl+D tiếp theo bắt đầu chuỗi mới
         Ctrl + Shift + Space  → bật/tắt overlay
         Ctrl + Shift + O      → bật/tắt đường nối
         Ctrl + Z              → undo điểm cuối
@@ -25,13 +27,15 @@ class GlobalListener(QObject):
     """
 
     # Signals
-    point_added     = pyqtSignal(int, int)
-    toggle_overlay  = pyqtSignal()
-    toggle_lines    = pyqtSignal()
-    undo_requested  = pyqtSignal()
-    clear_requested = pyqtSignal()
-    save_requested  = pyqtSignal()
-    quit_requested  = pyqtSignal()
+    point_added            = pyqtSignal(int, int)  # Ctrl+D: kết nối
+    isolated_point_added   = pyqtSignal(int, int)  # Ctrl+Shift+D: đơn lẻ
+    break_chain_requested  = pyqtSignal()           # Ctrl+B: ngắt chuỗi
+    toggle_overlay         = pyqtSignal()
+    toggle_lines           = pyqtSignal()
+    undo_requested         = pyqtSignal()
+    clear_requested        = pyqtSignal()
+    save_requested         = pyqtSignal()
+    quit_requested         = pyqtSignal()
 
     def __init__(self, hotkeys: HotkeyConfig | None = None) -> None:
         super().__init__()
@@ -114,6 +118,11 @@ class GlobalListener(QObject):
             if self._hk.match("add_point", pressed):
                 x, y = self._mouse_ctrl.position
                 self.point_added.emit(int(x), int(y))
+            elif self._hk.match("add_isolated", pressed):
+                x, y = self._mouse_ctrl.position
+                self.isolated_point_added.emit(int(x), int(y))
+            elif self._hk.match("break_chain", pressed):
+                self.break_chain_requested.emit()
             elif self._hk.match("toggle_lines", pressed):
                 self.toggle_lines.emit()
             elif self._hk.match("undo", pressed):

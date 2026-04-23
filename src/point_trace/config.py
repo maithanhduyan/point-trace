@@ -75,6 +75,8 @@ def _parse_combo(parts: list[str]) -> frozenset:
 # ── Hotkeys mặc định (dùng khi không tìm thấy config.toml) ───────────
 _DEFAULTS: dict[str, list[str]] = {
     "add_point":      ["ctrl", "d"],
+    "add_isolated":   ["ctrl", "shift", "d"],
+    "break_chain":    ["ctrl", "b"],
     "toggle_overlay": ["ctrl", "shift", "space"],
     "toggle_lines":   ["ctrl", "shift", "o"],
     "undo":           ["ctrl", "z"],
