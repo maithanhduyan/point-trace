@@ -3,6 +3,8 @@ name: Build MSI Installer
 on:
   # Tự động build khi push tag vX.Y.Z
   push:
+    branches:
+      - main
     tags:
       - "v*.*.*"
   # Cho phép chạy thủ công từ GitHub Actions tab

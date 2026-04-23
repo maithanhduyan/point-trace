@@ -43,14 +43,14 @@
       <!-- EXE bundle duy nhat (PyInstaller onefile mode) -->
       <Component Id="MainExe" Guid="*">
         <File Id="PointTraceExe"
-              Source="..\dist\point-trace.exe"
+              Source="dist\point-trace.exe"
               KeyPath="yes" />
       </Component>
 
-      <!-- Config file: user có thể chỉnh hotkeys sau khi cài -->
+      <!-- Config file: user co the chinh hotkeys sau khi cai -->
       <Component Id="ConfigFile" Guid="*">
         <File Id="ConfigToml"
-              Source="..\config.toml" />
+              Source="config.toml" />
       </Component>
 
     </ComponentGroup>
