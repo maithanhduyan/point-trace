@@ -37,6 +37,7 @@ class GlobalListener(QObject):
         super().__init__()
         self._hk = hotkeys or load_config()
         self._pressed: set = set()          # tập phím đang giữ
+        self._active = True                 # False khi overlay ẩn
         self._mouse_ctrl = mouse.Controller()
         self._kb_listener: keyboard.Listener | None = None
 
@@ -55,6 +56,11 @@ class GlobalListener(QObject):
         if self._kb_listener:
             self._kb_listener.stop()
         self._pressed.clear()
+
+    def set_active(self, active: bool) -> None:
+        """Khi active=False (overlay ẩn), chỉ lắng nghe toggle_overlay."""
+        self._active = active
+        self._pressed.clear()   # xờ pressed set khi chuyển chế độ
 
     # ------------------------------------------------------------------ #
     #  Helpers                                                             #
@@ -96,11 +102,18 @@ class GlobalListener(QObject):
             self._pressed.add(self._normalize(key))
             pressed = frozenset(self._pressed)
 
+            # toggle_overlay luôn được xử lý dù overlay ẩn hay hiện
+            if self._hk.match("toggle_overlay", pressed):
+                self.toggle_overlay.emit()
+                return
+
+            # Các hotkey khác chỉ hoạt động khi overlay đang hiện
+            if not self._active:
+                return
+
             if self._hk.match("add_point", pressed):
                 x, y = self._mouse_ctrl.position
                 self.point_added.emit(int(x), int(y))
-            elif self._hk.match("toggle_overlay", pressed):
-                self.toggle_overlay.emit()
             elif self._hk.match("toggle_lines", pressed):
                 self.toggle_lines.emit()
             elif self._hk.match("undo", pressed):

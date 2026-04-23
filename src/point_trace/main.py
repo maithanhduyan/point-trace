@@ -58,9 +58,18 @@ def main() -> None:
     listener.undo_requested.connect(overlay.undo_point)
     listener.clear_requested.connect(overlay.clear_points)
     listener.save_requested.connect(lambda: store.save())
-    listener.toggle_overlay.connect(lambda: overlay.hide() if overlay.isVisible() else overlay.showFullScreen())
     listener.toggle_lines.connect(overlay.toggle_lines)
     listener.quit_requested.connect(app.quit)
+
+    def _toggle_overlay():
+        if overlay.isVisible():
+            overlay.hide()
+            listener.set_active(False)
+        else:
+            overlay.showFullScreen()
+            listener.set_active(True)
+
+    listener.toggle_overlay.connect(_toggle_overlay)
 
     listener.start()
 
@@ -79,9 +88,7 @@ def main() -> None:
     act_toggle_lines.triggered.connect(overlay.toggle_lines)
 
     act_toggle_vis = menu.addAction("Ẩn/hiện overlay  (Ctrl+Shift+Space)")
-    act_toggle_vis.triggered.connect(
-        lambda: overlay.hide() if overlay.isVisible() else overlay.showFullScreen()
-    )
+    act_toggle_vis.triggered.connect(_toggle_overlay)
 
     menu.addSeparator()
 
