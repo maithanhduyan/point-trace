@@ -1,0 +1,27 @@
+# point-trace — cấu hình phím tắt
+# Mỗi tổ hợp là danh sách các tên phím pynput.
+# Modifier hợp lệ: ctrl, shift, alt
+# Phím thường: chữ thường a-z, space, esc, ...
+# Tham khảo tên đầy đủ: https://pynput.readthedocs.io/en/latest/keyboard.html
+
+[hotkeys]
+# Thêm điểm tại vị trí con trỏ chuột
+add_point       = ["ctrl", "d"]
+
+# Bật / tắt overlay (ẩn / hiện lớp phủ)
+toggle_overlay  = ["ctrl", "shift", "space"]
+
+# Bật / tắt đường nối giữa các điểm
+toggle_lines    = ["ctrl", "shift", "o"]
+
+# Undo điểm cuối
+undo            = ["ctrl", "z"]
+
+# Xóa toàn bộ điểm
+clear           = ["ctrl", "shift", "c"]
+
+# Lưu điểm ra points.json
+save            = ["ctrl", "shift", "s"]
+
+# Thoát chương trình
+quit            = ["esc"]

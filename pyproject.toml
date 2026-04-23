@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "point-trace"
+version = "0.1.0"
+description = "Transparent click-through overlay that records and replays mouse points across any Windows application"
+requires-python = ">=3.10"
+dependencies = [
+    "PyQt5>=5.15.0,<=5.15.10",
+    "PyQt5-Qt5>=5.15.2,<5.15.11",
+    "pynput>=1.7.0",
+]
+
+[project.scripts]
+point-trace = "point_trace.main:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/point_trace"]
+
+[tool.uv]
